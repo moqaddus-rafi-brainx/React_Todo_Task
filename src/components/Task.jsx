@@ -3,13 +3,15 @@ import axios from "axios";
 
 const token=localStorage.getItem('token');
 
+//Component for each task
 function Task({task, tasks, setTasks})
 {
     const [hide,setHide]= useState(true);
     const [input,setInput]= useState(task.description);
-    const [marked,setMarked]=useState(task.isCompleted);
+    const [marked,setMarked]=useState(task.isCompleted); //for marking as completed
     let isFirstRender = useRef(true);
     
+    //update task function
     const updateTask=()=>{
         axios.patch(`http://localhost:3000/api/tasks/${task._id}`,{
              description: input,
@@ -20,7 +22,6 @@ function Task({task, tasks, setTasks})
              },          
          })
          .then(response => {
-            console.log(response.data);
             setTasks(prevTasks =>
                 prevTasks.map(t => t._id === task._id ? response.data.task : t)
               );
@@ -30,12 +31,12 @@ function Task({task, tasks, setTasks})
             console.error(error);
           });
     }
-
+    //button to update clicked
     const startUpdate=()=>{
         setHide(false)
         setInput(task.description)
     }
-
+    //enter preesed for saving the changes
     const updateOnKeyDown=(e)=>{
         if(e.key=='Enter')
         {
@@ -43,6 +44,7 @@ function Task({task, tasks, setTasks})
         }
     }
 
+    //delete task function
     const deleteTask=()=>{
 
         axios.delete(`http://localhost:3000/api/tasks/${task._id}`, {
@@ -51,7 +53,7 @@ function Task({task, tasks, setTasks})
              },          
          })
          .then(response => {
-            console.log(response.data);
+           
             setTasks(prevTasks =>
                 prevTasks.filter(t => t._id !== task._id)
               );
@@ -62,6 +64,7 @@ function Task({task, tasks, setTasks})
 
     }
 
+    //Checked/Unchecked
     const markTaskAsCompleted=()=>{
         if(marked==true)
         {
@@ -72,7 +75,7 @@ function Task({task, tasks, setTasks})
             setMarked(true);
         }
     }
-    useEffect(()=>{
+    useEffect(()=>{ //DOnt call the updateTask for the first time//when component rendered
         if(isFirstRender.current)
         {
             isFirstRender.current=false;

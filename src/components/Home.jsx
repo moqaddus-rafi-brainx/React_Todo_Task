@@ -1,5 +1,6 @@
 import TaskList from "./TaskList";
 
+//MAIN COMPONENT
 function Home()
 {
     return(

@@ -6,11 +6,12 @@ import { useState ,useEffect} from "react";
 const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODFjMzBkMTBjMGQyZGRlZDA1NWJiY2EiLCJpYXQiOjE3NDY2Nzc5Njl9.eMI7QxfHLpjG2VeQlNjivYgvXbu9mwZn3awDVR-rjio"
 localStorage.setItem("token",token);
 
+//List of all the tasks plus adding task input
 function TaskList()
 {
    const [tasks,setTasks]=useState([]);
    const [input,setInput]=useState();
-
+   //All tasks from backend taken for first time
    useEffect(()=>{
       axios.get('http://localhost:3000/api/tasks', {
          headers: {
@@ -18,14 +19,13 @@ function TaskList()
           }
       })
 .then(response => {
-  console.log(response.data);
   setTasks(response.data.tasks);
 })
 .catch(error => {
   console.error(error);
 });
    },[])
-
+   //Add task function
    const addTask=async(e)=>{
       if(e.key=='Enter')
       {
@@ -35,7 +35,6 @@ function TaskList()
           },          
       })
       .then(response => {
-         console.log(response.data);
          setTasks([...tasks, response.data.task])
        })
        .catch(error => {
@@ -43,8 +42,6 @@ function TaskList()
        });
       }
       
-
-
 
    }
 
