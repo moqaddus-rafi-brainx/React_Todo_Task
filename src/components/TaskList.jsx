@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState ,useEffect} from "react";
 
 //token got after user login
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODFjMzBkMTBjMGQyZGRlZDA1NWJiY2EiLCJpYXQiOjE3NDY2Nzc5Njl9.eMI7QxfHLpjG2VeQlNjivYgvXbu9mwZn3awDVR-rjio"
+const token=import.meta.env.VITE_TOKEN;
 localStorage.setItem("token",token);
 
 //List of all the tasks plus adding task input
