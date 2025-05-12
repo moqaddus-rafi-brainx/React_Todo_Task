@@ -41,7 +41,10 @@ function Login(){
                     const response = await login(loginData);
                     console.log('Server Response:', response.data);
                     const token = response.data.token;
+                    if(token)
+                    {
                     navigate('/task-list',{ state: { token } });
+                    }
               } catch (error) {
                     const backendMessage = error.response.data.message;
                     setBackendError(backendMessage);
