@@ -1,6 +1,6 @@
-import TaskList from "./TaskList";
+import TaskList from "../components/TaskList";
 
-//MAIN COMPONENT
+//Main page after login
 function Home()
 {
     return(

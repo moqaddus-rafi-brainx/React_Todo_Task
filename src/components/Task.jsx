@@ -1,7 +1,7 @@
 import { useState,useEffect,useRef } from "react";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { updateTask,deleteTask } from "../apis/TaskApis";
 
-const token=localStorage.getItem('token');
 
 //Component for each task
 function Task({task, tasks, setTasks})
@@ -10,57 +10,55 @@ function Task({task, tasks, setTasks})
     const [input,setInput]= useState(task.description);
     const [marked,setMarked]=useState(task.isCompleted); //for marking as completed
     let isFirstRender = useRef(true);
+    const location = useLocation();
+    const tokenFromNav = location.state?.token;
     
     //update task function
-    const updateTask=()=>{
-        axios.patch(`http://localhost:3000/api/tasks/${task._id}`,{
-             description: input,
-             isCompleted: marked
-            }, {
-            headers: {
-               Authorization: `Bearer ${token}`
-             },          
-         })
-         .then(response => {
-            setTasks(prevTasks =>
-                prevTasks.map(t => t._id === task._id ? response.data.task : t)
-              );
-            setHide(true);
-          })
-          .catch(error => {
-            console.error(error);
+    const handleUpdateTask = async () => {
+        try {
+          const response = await updateTask(tokenFromNav, task._id, {
+            description: input,
+            isCompleted: marked,
           });
-    }
+      
+          setTasks(prevTasks =>
+            prevTasks.map(t =>
+              t._id === task._id ? response.data.task : t
+            )
+          );
+          setHide(true);
+        } catch (error) {
+          console.error('Update task error:', error);
+        }
+      };
+
+
+
     //button to update clicked
     const startUpdate=()=>{
         setHide(false)
         setInput(task.description)
     }
-    //enter preesed for saving the changes
-    const updateOnKeyDown=(e)=>{
+    //enter pressed for saving the changes
+    const updateOnKeyDown=async(e)=>{
         if(e.key=='Enter')
         {
-            updateTask();
+            handleUpdateTask();
         }
     }
 
     //delete task function
-    const deleteTask=()=>{
+    const handleDeleteTask=async()=>{
 
-        axios.delete(`http://localhost:3000/api/tasks/${task._id}`, {
-            headers: {
-               Authorization: `Bearer ${token}`
-             },          
-         })
-         .then(response => {
-           
+        try {
+            await deleteTask(tokenFromNav, task._id);
+        
             setTasks(prevTasks =>
-                prevTasks.filter(t => t._id !== task._id)
-              );
-          })
-          .catch(error => {
-            console.error(error);
-          });
+              prevTasks.filter(t => t._id !== task._id)
+            );
+          } catch (error) {
+            console.error('Delete task error:', error);
+          }
 
     }
 
@@ -81,19 +79,19 @@ function Task({task, tasks, setTasks})
             isFirstRender.current=false;
             return;
         }
-        updateTask();
+        handleUpdateTask();
     },[marked])
 
     return(
     <li>
         <div className="task-left">
             <input type="checkbox" checked={marked} onChange={markTaskAsCompleted}  />
-            {!hide && <input type="text" className="update-input" value={input} onChange={(e)=>{setInput(e.target.value)}} onBlur={updateTask} onKeyDown={updateOnKeyDown} />}
+            {!hide && <input type="text" className="update-input" value={input} onChange={(e)=>{setInput(e.target.value)}} onBlur={handleUpdateTask} onKeyDown={updateOnKeyDown} />}
             {hide && <span className={marked? "completed": "incomplete"}>{task.description}</span>}
         </div>
         <div className="task-right">
           <i className="bi bi-pencil-square" onClick={startUpdate} ></i>
-          <i className="bi bi-trash" onClick={deleteTask} ></i>
+          <i className="bi bi-trash" onClick={handleDeleteTask} ></i>
         </div>
     </li>
     )
