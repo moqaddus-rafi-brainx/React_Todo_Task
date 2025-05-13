@@ -4,6 +4,8 @@ This is a simple React application built for practice purposes. It demonstrates 
 
 ## 📝 Features
 - Signup/Login
+- Change Password
+- Logout
 - User Authentication and Authorization
 - Add new tasks
 - Delete tasks
