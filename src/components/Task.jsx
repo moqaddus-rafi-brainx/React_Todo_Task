@@ -4,19 +4,17 @@ import { updateTask,deleteTask } from "../apis/TaskApis";
 
 
 //Component for each task
-function Task({task, tasks, setTasks})
+function Task({task, tasks, setTasks ,token})
 {
     const [hide,setHide]= useState(true);
     const [input,setInput]= useState(task.description);
     const [marked,setMarked]=useState(task.isCompleted); //for marking as completed
     let isFirstRender = useRef(true);
-    const location = useLocation();
-    const tokenFromNav = location.state?.token;
     
     //update task function
     const handleUpdateTask = async () => {
         try {
-          const response = await updateTask(tokenFromNav, task._id, {
+          const response = await updateTask(token, task._id, {
             description: input,
             isCompleted: marked,
           });
@@ -51,7 +49,7 @@ function Task({task, tasks, setTasks})
     const handleDeleteTask=async()=>{
 
         try {
-            await deleteTask(tokenFromNav, task._id);
+            await deleteTask(token, task._id);
         
             setTasks(prevTasks =>
               prevTasks.filter(t => t._id !== task._id)

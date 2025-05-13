@@ -1,5 +1,5 @@
 
-import { emailRegex } from "../constants/regex";
+import { emailRegex } from "../constants";
 
 
 const usernameReducer = (state, action) => {

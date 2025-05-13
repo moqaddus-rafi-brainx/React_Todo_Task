@@ -72,8 +72,8 @@ function ResetPassword(){
             <input type="password" name="password" placeholder="Password" value={passwordState.value} className="input"
                 onChange={handlePasswordChange}
             />
-            {passwordState?.error && (
-                <p className="error-prompt">{passwordState.error}</p>
+            {(
+                <p className="error-prompt">{passwordState.error || '\u00A0'}</p>
             )}
 
             <input type="password" name="confirmPassword" placeholder="Confirm password" value={confirmPassState.value} className="input"
@@ -81,8 +81,8 @@ function ResetPassword(){
                     dispatchConfirmPass({ type: "CHANGE", value: e.target.value , matchWith: passwordState.value })
                 }
             />
-            {confirmPassState?.error && (
-                <p className="error-prompt">{confirmPassState.error}</p>
+            {(
+                <p className="error-prompt">{confirmPassState.error || '\u00A0'}</p>
             )}
 
             <button type="submit" disabled={!isValid} >Submit</button>

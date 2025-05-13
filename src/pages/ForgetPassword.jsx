@@ -1,7 +1,7 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
 import emailReducer from "../reducers/ForgetPasswordReducer";
-import { emailRegex } from "../constants/regex";
+import { emailRegex } from "../constants";
 import { forgetPassword } from "../apis/AuthApis";
 import axios from "axios";
 //Forget password function
@@ -13,6 +13,7 @@ function ForgetPassword(){
     })
 
     const [isSubmitted,setIsSubmitted]=useState(false);
+    const [isLoading,setIsLoading]=useState(false);
     const isValid= emailRegex.test(emailState.value) && !emailState.error;
 
     const handleSubmit= async(e)=>{
@@ -24,8 +25,9 @@ function ForgetPassword(){
                 email: emailState.value,
             };
               try {
-                const response = await forgetPassword(email)
+                const response = await forgetPassword(email,setIsLoading)
                   setIsSubmitted(true);
+                  setIsLoading(false);
               } catch (error) {
                   console.error('Signup Error:', error);
               }
@@ -36,15 +38,16 @@ function ForgetPassword(){
 
     return( //Login FORM RETURNED when isSubmitted is False.
         <> 
-        {!isSubmitted && (<form className="card" onSubmit={handleSubmit}>
+        {isLoading && <p>Loading....Please wait</p>}
+        {!isSubmitted && !isLoading && (<form className="card" onSubmit={handleSubmit}>
             <p>Enter your email for getting reset password link</p>
             <input type="email" name="email" placeholder="Email" value={emailState.value} className="input"
                 onChange={(e) =>
                     dispatchEmail({ type: "CHANGE", value: e.target.value })
                 }
             />
-            {emailState?.error && (
-                <p className="error-prompt">{emailState.error}</p>
+            { (
+                <p className="error-prompt">{emailState.error || '\u00A0'}</p>
             )}
             
             <button type="submit" disabled={!isValid} >Submit</button>

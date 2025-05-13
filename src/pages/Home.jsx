@@ -1,31 +1,45 @@
 import TaskList from "../components/TaskList";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 
 //Main page after login
 function Home()
 {
-    const location = useLocation();
-    const tokenFromNav = location.state?.token; //saved by login function
     const navigate = useNavigate();
+    const [loading,setLoading]=useState();
+    const [token,setToken]=useState();
+    const storedToken = localStorage.getItem('token');
+
+    useEffect(() => {
+      if (storedToken) {
+        setToken(storedToken);
+      }
+      setLoading(false); // done loading
+    }, []);
+  
 
     //If unauthorized access is made
     useEffect(() => {
-        if (!tokenFromNav) {
+        if (!storedToken) {
           navigate('/login');
         }
-      }, [navigate, tokenFromNav]);
+      }, [navigate, storedToken]);
     
-      if (!tokenFromNav) return null;
+      if (!storedToken) return null;
     
+    if (loading) return <p>Loading...</p>;
 
     return(
+      <>
+    <Navbar />
     <div className="todo-container">
         <h1>MY Todo App</h1>
-    <TaskList/>
+    <TaskList token={token}/>
     </div>
+    </>
     )
 }
 

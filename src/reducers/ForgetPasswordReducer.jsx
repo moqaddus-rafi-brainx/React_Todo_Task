@@ -1,4 +1,4 @@
-import { emailRegex } from "../constants/regex";
+import { emailRegex } from "../constants";
 
 function emailReducer(state,action)
 {

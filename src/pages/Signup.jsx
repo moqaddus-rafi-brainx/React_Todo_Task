@@ -1,7 +1,7 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
 import { usernameReducer,emailReducer,passwordReducer } from "../reducers/SignupReducer";
-import { emailRegex } from "../constants/regex";
+import { emailRegex } from "../constants";
 import { signup } from "../apis/AuthApis";
 
 
@@ -25,6 +25,7 @@ function Signup() {
 
     const [isSubmitted,setIsSubmitted]=useState(false); //To render the page again when page its value changes
     const [signupError,setSignupError]=useState(''); //saves response errors
+    const [isLoading,setIsLoading]=useState(false);//To show loading message after signup and before verification email is sent successfully.
 
     //used for enabling/disabling the submit button
     const isValid = usernameState.value.trim() && emailRegex.test(emailState.value) &&
@@ -43,8 +44,9 @@ function Signup() {
               password: passwordState.value,
           };
           try {
-              const response =await signup(signupData); //signup api call
+              const response =await signup(signupData,setIsLoading); //signup api call
               setIsSubmitted(true);
+              setIsLoading(false);
             } catch (error) {
               console.error('Signup Error:', error.response.data.message);
               setSignupError(error.response.data.message);
@@ -54,7 +56,8 @@ function Signup() {
 
     return (
         <>
-    {!isSubmitted && (<form className="card"  onSubmit={handleSubmit}>
+        {isLoading && <p>Loading...Please wait!</p>}
+    {!isSubmitted && !isLoading && (<form className="card"  onSubmit={handleSubmit }>
       <h2 >Signup</h2>
       {signupError && <p className="error-prompt">{signupError}</p>}
       <input type="text" name="username" placeholder="Username" value={usernameState.value} className="input"
@@ -62,8 +65,8 @@ function Signup() {
           dispatchUsername({ type: "CHANGE", value: e.target.value })
         }
       />
-      {usernameState.error && (
-        <p className="error-prompt">{usernameState.error}</p>
+      {(
+        <p className="error-prompt">{usernameState.error || '\u00A0'}</p>
       )}
 
       <input
@@ -72,8 +75,8 @@ function Signup() {
           dispatchEmail({ type: "CHANGE", value: e.target.value })
         }
       />
-      {emailState.error && (
-        <p className="error-prompt">{emailState.error}</p>
+      {(
+        <p className="error-prompt">{emailState.error || '\u00A0'}</p>
       )}
 
       <input
@@ -83,8 +86,8 @@ function Signup() {
           dispatchPassword({ type: "CHANGE", value: e.target.value })
         }
       />
-      {passwordState.error && (
-        <p className="error-prompt">{passwordState.error}</p>
+      { (
+        <p className="error-prompt">{passwordState.error || '\u00A0'}</p>
       )}
 
       <button type="submit" className="btn" disabled={!isValid}>

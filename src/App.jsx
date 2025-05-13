@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import ForgetPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
 import VerifyEmail from './pages/VerifyEmail';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/task-list" element={<Home />} />
+      <Route path="/change-password" element={<ChangePassword />} />
     </Routes>
     </div>
   )
