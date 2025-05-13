@@ -23,10 +23,8 @@ function ForgetPassword(){
             const email = {
                 email: emailState.value,
             };
-            console.log(email);
               try {
                 const response = await forgetPassword(email)
-                  console.log('Server Response:', response.data);
                   setIsSubmitted(true);
               } catch (error) {
                   console.error('Signup Error:', error);

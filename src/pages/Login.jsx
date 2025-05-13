@@ -39,7 +39,6 @@ function Login(){
             console.log(loginData);
               try {
                     const response = await login(loginData);
-                    console.log('Server Response:', response.data);
                     const token = response.data.token;
                     if(token)
                     {

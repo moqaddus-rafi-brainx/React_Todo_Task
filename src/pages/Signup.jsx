@@ -44,7 +44,6 @@ function Signup() {
           };
           try {
               const response =await signup(signupData); //signup api call
-              console.log('Server Response:', response.data);
               setIsSubmitted(true);
             } catch (error) {
               console.error('Signup Error:', error.response.data.message);

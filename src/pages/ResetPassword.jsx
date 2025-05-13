@@ -42,7 +42,6 @@ function ResetPassword(){
         
               try {
                 const response = await resetPassword(token,newPass);
-                  console.log('Server Response:', response.data);
                   setIsSubmitted(true);
               } catch (error) {
                   console.error('Signup Error:', error);

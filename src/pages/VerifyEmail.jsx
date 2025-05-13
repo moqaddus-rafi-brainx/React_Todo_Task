@@ -17,8 +17,7 @@ function VerifyEmail(){
       const sendToken=async()=>{
         try {
             const response = await verifyEmail(token); //api call function
-            console.log('Verification success:', response.data);
-            setIsVerified(true);// show success message to user
+            setIsVerified(true);//show success message to user
 
           } catch (error) {
             console.error('Verification failed:', error.response?.data || error.message);
