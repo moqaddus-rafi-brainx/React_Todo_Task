@@ -19,7 +19,7 @@ function TaskList({ token })
     if (!token) return;
     const fetchTasks = async () => {
       try {
-        const response = await getAllTasks(token);
+        const response = await getAllTasks();
         setTasks(response.data.tasks);
       } catch (error) {
         console.log('Getting all tasks error', error);
@@ -37,7 +37,7 @@ function TaskList({ token })
             description:input,
             deadline:deadline,
           }
-          const response = await addTask(token, data);
+          const response = await addTask( data);
           setInput("");
           setDeadline("");
           setTasks([...tasks, response.data.task]);

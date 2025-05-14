@@ -19,13 +19,11 @@ function Task({task, tasks, setTasks ,token})
     let isFirstRender = useRef(true);
     const decoded = jwtDecode(token);
     const isOwner = task.userId === decoded.id;
-    console.log('UserId',task.userId)//////
-    console.log('Decode Id',decoded.id)//////
 
     //update task function
     const handleUpdateTask = async () => {
         try {
-          const response = await updateTask(token, task._id, {
+          const response = await updateTask(task._id, {
             description: input,
             isCompleted: marked,
           });
@@ -60,7 +58,7 @@ function Task({task, tasks, setTasks ,token})
     const handleDeleteTask=async()=>{
 
         try {
-            await deleteTask(token, task._id);
+            await deleteTask(task._id);
         
             setTasks(prevTasks =>
               prevTasks.filter(t => t._id !== task._id)
@@ -96,7 +94,7 @@ function Task({task, tasks, setTasks ,token})
         setBackendError("");
         const response = await shareTask(task._id, {
           email:emailToShare
-      },token,setLoading)
+      },setLoading)
       setEmailToShare("");
       setLoading(false);
       setSharing(false);
