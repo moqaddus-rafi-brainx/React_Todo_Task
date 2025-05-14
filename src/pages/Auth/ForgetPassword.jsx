@@ -1,8 +1,8 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
-import emailReducer from "../reducers/ForgetPasswordReducer";
-import { emailRegex } from "../constants";
-import { forgetPassword } from "../apis/AuthApis";
+import emailReducer from "../../reducers/ForgetPasswordReducer";
+import { emailRegex } from "../../constants";
+import { forgetPassword } from "../../apis/AuthApis";
 import axios from "axios";
 //Forget password function
 function ForgetPassword(){
@@ -29,6 +29,7 @@ function ForgetPassword(){
                   setIsSubmitted(true);
                   setIsLoading(false);
               } catch (error) {
+                    setIsLoading(false);
                   console.error('Signup Error:', error);
               }
             

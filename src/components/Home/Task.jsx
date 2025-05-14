@@ -1,6 +1,6 @@
 import { useState,useEffect,useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { updateTask,deleteTask } from "../apis/TaskApis";
+import { updateTask,deleteTask } from "../../apis/TaskApis";
 
 
 //Component for each task

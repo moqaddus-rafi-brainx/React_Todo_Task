@@ -1,9 +1,9 @@
 import { useReducer, useState,useEffect } from "react";
 import { Link } from "react-router-dom";
-import { emailReducer,passwordReducer } from "../reducers/SignupReducer";
-import { emailRegex } from "../constants";
+import { emailReducer,passwordReducer } from "../../reducers/SignupReducer";
+import { emailRegex } from "../../constants";
 import { useNavigate } from 'react-router-dom';
-import { login } from "../apis/AuthApis";
+import { login } from "../../apis/AuthApis";
 
 
 
@@ -54,6 +54,7 @@ function Login(){
                     navigate('/task-list',{ state: { token } });
                     }
               } catch (error) {
+                    setIsLoading(false);
                     const backendMessage = error.response.data.message;
                     setBackendError(backendMessage);
                     console.error('Login Error:', error);

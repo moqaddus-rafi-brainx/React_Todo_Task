@@ -1,8 +1,8 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
-import { usernameReducer,emailReducer,passwordReducer } from "../reducers/SignupReducer";
-import { emailRegex } from "../constants";
-import { signup } from "../apis/AuthApis";
+import { usernameReducer,emailReducer,passwordReducer } from "../../reducers/SignupReducer";
+import { emailRegex } from "../../constants";
+import { signup } from "../../apis/AuthApis";
 
 
 
@@ -48,6 +48,7 @@ function Signup() {
               setIsSubmitted(true);
               setIsLoading(false);
             } catch (error) {
+              setIsLoading(false);
               console.error('Signup Error:', error.response.data.message);
               setSignupError(error.response.data.message);
             }
@@ -59,7 +60,7 @@ function Signup() {
         {isLoading && <p>Loading...Please wait!</p>}
     {!isSubmitted && !isLoading && (<form className="card"  onSubmit={handleSubmit }>
       <h2 >Signup</h2>
-      {signupError && <p className="error-prompt">{signupError}</p>}
+      {<p className="error-prompt">{signupError || '\u00A0'}</p>}
       <input type="text" name="username" placeholder="Username" value={usernameState.value} className="input"
         required onChange={(e) =>
           dispatchUsername({ type: "CHANGE", value: e.target.value })

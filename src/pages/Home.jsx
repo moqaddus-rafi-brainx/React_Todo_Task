@@ -1,4 +1,4 @@
-import TaskList from "../components/TaskList";
+import TaskList from "../components/Home/TaskList";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
@@ -20,16 +20,6 @@ function Home()
       setLoading(false); // done loading
     }, []);
   
-
-    //If unauthorized access is made
-    useEffect(() => {
-        if (!storedToken) {
-          navigate('/login');
-        }
-      }, [navigate, storedToken]);
-    
-      if (!storedToken) return null;
-    
     if (loading) return <p>Loading...</p>;
 
     return(

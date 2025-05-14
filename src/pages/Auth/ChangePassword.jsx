@@ -1,8 +1,9 @@
 import { useReducer, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import confirmPassReducer from "../reducers/ResetPasswordReducer";
-import { passwordReducer } from "../reducers/SignupReducer";
-import { changePassword } from "../apis/AuthApis";
+import confirmPassReducer from "../../reducers/ResetPasswordReducer";
+import { passwordReducer } from "../../reducers/SignupReducer";
+import { changePassword } from "../../apis/AuthApis";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -25,7 +26,7 @@ function ChangePassword() {
     const [token, setToken] = useState();
     const [backendError, setBackendError] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
-
+    const navigate = useNavigate();
     const storedToken = localStorage.getItem('token');
 
     useEffect(() => {
@@ -76,6 +77,10 @@ function ChangePassword() {
         }
     };
 
+    const handleGoBack=()=>{
+        navigate('/task-list')
+    }
+
     return (
         <>
             {!isSubmitted && (
@@ -119,17 +124,26 @@ function ChangePassword() {
                     <p className="error-prompt">{confirmPassState.error || '\u00A0'}</p>
 
                     {backendError && <p className="error-prompt">{backendError}</p>}
-
+                    <div className="change-buttons">
                     <button type="submit" disabled={!isValid}>
                         Submit
                     </button>
+                    <button onClick={handleGoBack}>
+                    Cancel
+                    </button>
+                    </div>
                 </form>
             )}
 
             {isSubmitted && (
+                <>
                 <p>
                     Password Changed Successfully!
                 </p>
+                <button onClick={handleGoBack}>
+                    Back
+                </button>
+            </>
             )}
         </>
     );

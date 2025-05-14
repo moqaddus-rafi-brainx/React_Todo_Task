@@ -1,8 +1,8 @@
 import { useReducer,useState,useEffect } from "react";
 import { Link } from "react-router-dom";
-import confirmPassReducer from "../reducers/ResetPasswordReducer";
-import { passwordReducer } from "../reducers/SignupReducer";
-import { resetPassword } from "../apis/AuthApis";
+import confirmPassReducer from "../../reducers/ResetPasswordReducer";
+import { passwordReducer } from "../../reducers/SignupReducer";
+import { resetPassword } from "../../apis/AuthApis";
 
 
 

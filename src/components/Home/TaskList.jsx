@@ -2,7 +2,7 @@ import Task from "./Task";
 import axios from "axios";
 import { useState ,useEffect} from "react";
 import { useLocation } from 'react-router-dom';
-import { addTask,getAllTasks } from "../apis/TaskApis";
+import { addTask,getAllTasks } from "../../apis/TaskApis";
 
 
 //List of all the tasks plus adding task input
