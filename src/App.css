@@ -25,7 +25,7 @@ h1 {
   margin: 26.8px 0px;
 }
 
-#task-input {
+.task-input {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
@@ -170,6 +170,12 @@ button:focus-visible {
   align-items: center;
 }
 
+.input-date{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 
 
 
@@ -210,4 +216,33 @@ button:focus-visible {
 
 .navbar-buttons button:hover {
   background-color: #2980b9;
+}
+
+
+/*Modal code*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 300px;
+}
+
+.modal-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }

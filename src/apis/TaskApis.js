@@ -3,9 +3,9 @@ import axios from "axios";
 const TaskUrl=import.meta.env.VITE_TASK_URL;
 
 //Add task Api function
-export const addTask=async(tokenFromNav,description)=>{
+export const addTask=async(tokenFromNav,data)=>{
    
-    return axios.post(`${TaskUrl}`,{ description }, {
+    return axios.post(`${TaskUrl}`,data, {
        headers: {
           Authorization: `Bearer ${tokenFromNav}`
         },          
@@ -36,4 +36,13 @@ export const addTask=async(tokenFromNav,description)=>{
            Authorization: `Bearer ${tokenFromNav}`
          }
      })
+  }
+
+  export const shareTask=async(taskId,email,token,setLoading)=>{
+    setLoading(true);
+    return axios.post(`${TaskUrl}/${taskId}`, email, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }

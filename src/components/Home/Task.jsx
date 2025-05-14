@@ -1,6 +1,9 @@
 import { useState,useEffect,useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { updateTask,deleteTask } from "../../apis/TaskApis";
+import { updateTask,deleteTask,shareTask } from "../../apis/TaskApis";
+import {jwtDecode} from "jwt-decode";
+import ShareModal from "./ShareModal";
+
 
 
 //Component for each task
@@ -9,8 +12,16 @@ function Task({task, tasks, setTasks ,token})
     const [hide,setHide]= useState(true);
     const [input,setInput]= useState(task.description);
     const [marked,setMarked]=useState(task.isCompleted); //for marking as completed
+    const [sharing,setSharing]=useState(false);
+    const [emailToShare,setEmailToShare]=useState("");
+    const [loading,setLoading]=useState(false);
+    const [backendError,setBackendError]=useState("");
     let isFirstRender = useRef(true);
-    
+    const decoded = jwtDecode(token);
+    const isOwner = task.userId === decoded.id;
+    console.log('UserId',task.userId)//////
+    console.log('Decode Id',decoded.id)//////
+
     //update task function
     const handleUpdateTask = async () => {
         try {
@@ -80,6 +91,25 @@ function Task({task, tasks, setTasks ,token})
         handleUpdateTask();
     },[marked])
 
+    const handleShareTask=async()=>{
+      try {
+        setBackendError("");
+        const response = await shareTask(task._id, {
+          email:emailToShare
+      },token,setLoading)
+      setEmailToShare("");
+      setLoading(false);
+      setSharing(false);
+
+    }catch (error) {
+      console.error('Share task error:', error.response.data.message);
+      setBackendError(error.response.data.message)
+      setLoading(false);
+
+    }
+    
+  }
+
     return(
     <li>
         <div className="task-left">
@@ -89,7 +119,23 @@ function Task({task, tasks, setTasks ,token})
         </div>
         <div className="task-right">
           <i className="bi bi-pencil-square" onClick={startUpdate} ></i>
-          <i className="bi bi-trash" onClick={handleDeleteTask} ></i>
+          {isOwner && (
+          <>
+            <i className="bi bi-trash" onClick={handleDeleteTask} ></i>
+            <i className="bi bi-share" onClick={() => setSharing(true)}></i>
+            {sharing && (
+                
+                <ShareModal
+                  onClose={() => setSharing(false)}
+                  onShare={handleShareTask}
+                  email={emailToShare}
+                  setEmail={setEmailToShare}
+                  loading={loading}
+                  backendError={backendError}
+                />
+            )}
+          </>
+        )}
         </div>
     </li>
     )
