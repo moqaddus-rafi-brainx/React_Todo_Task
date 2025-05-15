@@ -4,6 +4,7 @@ import { emailReducer,passwordReducer } from "../../reducers/SignupReducer";
 import { emailRegex } from "../../constants";
 import { useNavigate } from 'react-router-dom';
 import { login } from "../../apis/AuthApis";
+import { jwtDecode } from "jwt-decode";
 
 
 
@@ -47,15 +48,21 @@ function Login(){
               try {
                     const response = await login(loginData,setIsLoading);
                     const token = response.data.token;
+                    const username=response.data.username;
                     setIsLoading(false);
                     if(token)
                     {
                     localStorage.setItem('token',token);
+                    localStorage.setItem('name',username);
+                    const decoded = jwtDecode(token);
+                    console.log('login user id',decoded.id);
+                   // registerUser(decoded.id);
+                     
                     navigate('/task-list',{ state: { token } });
                     }
               } catch (error) {
                     setIsLoading(false);
-                    const backendMessage = error.response.data.message;
+                    const backendMessage = error.response.data?.message || error.message ;
                     setBackendError(backendMessage);
                     console.error('Login Error:', error);
               }
