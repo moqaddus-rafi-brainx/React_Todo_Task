@@ -1,25 +1,11 @@
 # React Todo List App
 
-This is a simple React application built for practice purposes. It demonstrates core React concepts such as component-based architecture, authentcation, state management, and props.
+This branch introduces a real-time **task sharing** feature using **Socket.IO** for instant notifications and and using **Nodemailer** for sending email notifications as well.
 
 ## 📝 Features
-- Signup/Login
-- Change Password
-- Logout
-- User Authentication and Authorization
-- Add new tasks
-- Delete tasks
-- Update task details
-- Mark tasks as completed
+- Share a task with any verified user by their email.
+- task email notification
+- Real-time notification using WebSockets (Socket.IO)
+- Visual notification bell with count.
+- "Mark all as read" option in dropdown.
 
-## 🧱 Pages
-
-The app is structured into these pages:
-- Signup Page
-- Login Page
-- Email Verification Page
-- Forgot Password Page
-- Reset Password Page
-- Home Page: Home page it the main page after login that displays the task list of the user.It further consists of:
----- **TaskList** – Displays the list of all tasks and add a new task.
----- **Task** – Represents individual task items with options to edit, delete, or mark as complete.
