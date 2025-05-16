@@ -1,5 +1,4 @@
 import TaskList from "../components/Home/TaskList";
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { NotificationProvider } from "../NotificationContext";
@@ -8,7 +7,6 @@ import { NotificationProvider } from "../NotificationContext";
 //Main page after login
 function Home()
 {
-    const navigate = useNavigate();
     const [loading,setLoading]=useState();
     const [token,setToken]=useState();
     const storedToken = localStorage.getItem('token');

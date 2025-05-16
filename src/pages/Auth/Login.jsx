@@ -4,7 +4,6 @@ import { emailReducer,passwordReducer } from "../../reducers/SignupReducer";
 import { emailRegex } from "../../constants";
 import { useNavigate } from 'react-router-dom';
 import { login } from "../../apis/AuthApis";
-import { jwtDecode } from "jwt-decode";
 
 
 //Login function
@@ -53,7 +52,7 @@ function Login(){
                     {
                     localStorage.setItem('token',token);
                     localStorage.setItem('name',username);
-                    navigate('/task-list',{ state: { token } });
+                    navigate('/task-list');
                     }
               } catch (error) {
                     setIsLoading(false);
