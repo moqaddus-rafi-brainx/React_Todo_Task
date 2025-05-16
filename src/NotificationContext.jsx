@@ -31,7 +31,6 @@ export const NotificationProvider = ({ children }) => {
     //Ensures registering after connection
     socket.on('connect', () => {
       socket.emit('register', userId);
-      console.log('Socket connected and user registered:', userId);
     });
 
     //adding notification

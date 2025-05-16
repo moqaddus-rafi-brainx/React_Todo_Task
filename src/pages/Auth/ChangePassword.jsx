@@ -139,6 +139,7 @@ function ChangePassword() {
                 <p>
                     Password Changed Successfully!
                 </p>
+                <hr/>
                 <button onClick={handleGoBack}>
                     Back
                 </button>

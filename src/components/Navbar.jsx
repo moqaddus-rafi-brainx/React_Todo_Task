@@ -23,7 +23,7 @@ const Navbar = () => {
       <div className="navbar-title">My Todo App</div>
       <div className="navbar-buttons">
       <span className="bell-wrapper">
-      <button className="no-bg" onClick={() => setOpen(!open)}>
+      <button className="no-bg" onClick={() => setOpen(!open)} onBlur={() => setTimeout(() => setOpen(false), 150)}>
       <i className="bi bi-bell bell">
         {notifications.length > 0 && (
           <span className="badge">{notifications.length}</span>
