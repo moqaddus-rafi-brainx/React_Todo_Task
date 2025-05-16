@@ -1,5 +1,4 @@
 import TaskList from "../components/Home/TaskList";
-import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
@@ -13,7 +12,6 @@ function Home()
     const [loading,setLoading]=useState();
     const [token,setToken]=useState();
     const storedToken = localStorage.getItem('token');
-    const [socket,setSocket]=useState(null);
     const username=localStorage.getItem('name');
 
     useEffect(() => {

@@ -5,29 +5,25 @@ import { useNotifications } from '../NotificationContext';
 
 const Navbar = () => {
   const { notifications,clearNotifications } = useNotifications();
-  console.log('notification', notifications)
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('notifications');
     navigate('/login');
   };
-
-  
 
   const handleChangePassword=()=>{
     navigate('/change-password');
   }
 
-
-
   return (
     <nav className="navbar">
       <div className="navbar-title">My Todo App</div>
       <div className="navbar-buttons">
-  <span className="bell-wrapper">
-    <button className="no-bg" onClick={() => setOpen(!open)}>
+      <span className="bell-wrapper">
+      <button className="no-bg" onClick={() => setOpen(!open)}>
       <i className="bi bi-bell bell">
         {notifications.length > 0 && (
           <span className="badge">{notifications.length}</span>

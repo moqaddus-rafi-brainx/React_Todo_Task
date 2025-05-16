@@ -1,16 +1,15 @@
-// NotificationContext.jsx (Working version)
 import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { jwtDecode } from 'jwt-decode';
 
+//Notification Context for Navbar
 const NotificationContext = createContext();
 const backendUrl=import.meta.env.VITE_BACKEND_URL;
 export const useNotifications = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
-  const [notifications, setNotifications] = useState(() => {
-    // Load from localStorage on initial load
-    const stored = localStorage.getItem('notifications');
+    const [notifications, setNotifications] = useState(() => {
+    const stored = localStorage.getItem('notifications'); //load the already stored notifications
     return stored ? JSON.parse(stored) : [];
   })
 
@@ -27,13 +26,15 @@ export const NotificationProvider = ({ children }) => {
       return;
     }
 
-    const socket = io('http://localhost:3000');
+    const socket = io(backendUrl);
 
+    //Ensures registering after connection
     socket.on('connect', () => {
       socket.emit('register', userId);
       console.log('Socket connected and user registered:', userId);
     });
 
+    //adding notification
     socket.on('notification', (notification) => {
       setNotifications((prev) => [notification, ...prev]);
     });
@@ -45,7 +46,7 @@ export const NotificationProvider = ({ children }) => {
     };
   }, []);
 
-  // Save to localStorage whenever notifications change
+  //Save to localStorage whenever notifications change (for making refresh resistent)
   useEffect(() => {
     localStorage.setItem('notifications', JSON.stringify(notifications));
   }, [notifications]);

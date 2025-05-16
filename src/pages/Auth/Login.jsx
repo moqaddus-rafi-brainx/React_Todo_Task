@@ -7,7 +7,6 @@ import { login } from "../../apis/AuthApis";
 import { jwtDecode } from "jwt-decode";
 
 
-
 //Login function
 function Login(){
     const [emailState,dispatchEmail]=useReducer(emailReducer,{
@@ -54,10 +53,6 @@ function Login(){
                     {
                     localStorage.setItem('token',token);
                     localStorage.setItem('name',username);
-                    const decoded = jwtDecode(token);
-                    console.log('login user id',decoded.id);
-                   // registerUser(decoded.id);
-                     
                     navigate('/task-list',{ state: { token } });
                     }
               } catch (error) {

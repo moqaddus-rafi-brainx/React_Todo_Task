@@ -13,7 +13,7 @@ function Task({task, tasks, setTasks ,token})
     const [input,setInput]= useState(task.description);
     const [marked,setMarked]=useState(task.isCompleted); //for marking as completed
     const [sharing,setSharing]=useState(false);
-    const [emailToShare,setEmailToShare]=useState("");
+    const [emailToShare,setEmailToShare]=useState("");//Email of the recipient/collaborator
     const [loading,setLoading]=useState(false);
     const [backendError,setBackendError]=useState("");
     let isFirstRender = useRef(true);
@@ -100,8 +100,8 @@ function Task({task, tasks, setTasks ,token})
       setSharing(false);
 
     }catch (error) {
-      console.error('Share task error:', error.response.data.message);
-      setBackendError(error.response.data.message)
+      console.error('Share task error:', error.response.data?.message);
+      setBackendError(error.response.data?.message || error.message)
       setLoading(false);
 
     }

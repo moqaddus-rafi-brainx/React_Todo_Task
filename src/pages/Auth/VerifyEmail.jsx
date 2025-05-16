@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import axios from "axios";
 import { verifyEmail } from "../../apis/AuthApis";
 
 function VerifyEmail(){
+
     const [token, setToken] = useState('');
     const [isVerified,setIsVerified]=useState(false);
     const [failed,setFailed]=useState(false);
+
     useEffect(() => {
         //Fetching token from url
         const url = new URL(window.location.href);
