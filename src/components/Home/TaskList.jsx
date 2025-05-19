@@ -1,32 +1,17 @@
 import Task from "./Task";
-import { useState ,useEffect} from "react";
-import { addTask,getAllTasks } from "../../apis/TaskApis";
-
+import { useState} from "react";
+import { addTask} from "../../apis/TaskApis";
+import { useTaskContext } from "../../contexts/TaskContext";
 
 
 //List of all the tasks plus adding task input
 function TaskList({ token })
 {
-   const [tasks,setTasks]=useState([]);
+   const { tasks, setTasks } = useTaskContext();
    const [input,setInput]=useState("");
    const [deadline,setDeadline] =useState("");
    const [error,setError]=useState("");
   
-  // Fetch tasks only when token is available
-  useEffect(() => {
-    if (!token) return;
-    const fetchTasks = async () => {
-      try {
-        const response = await getAllTasks();
-        setTasks(response.data.tasks);
-      } catch (error) {
-        console.log('Getting all tasks error', error);
-      }
-    };
-  
-    fetchTasks();
-  }, [token]);
-
   //Add task after selection of date
   const handleDateBlur=async(e)=>{
     if(!deadline)
@@ -96,7 +81,7 @@ function TaskList({ token })
             <hr/>
             <ul id="task-list">
                { tasks.map (task=>(
-                  <Task key={task._id} task={task} tasks={tasks} setTasks={setTasks} token={token} />
+                  <Task key={task._id} task={task} setTasks={setTasks} token={token} />
                ))}
             </ul>
         </div>

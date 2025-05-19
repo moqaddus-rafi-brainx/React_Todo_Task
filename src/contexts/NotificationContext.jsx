@@ -1,10 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-import { jwtDecode } from 'jwt-decode';
+import { useTaskContext } from './TaskContext';
+import { useSocket } from './SocketContext';
 
 //Notification Context for Navbar
 const NotificationContext = createContext();
-const backendUrl=import.meta.env.VITE_BACKEND_URL;
 export const useNotifications = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
@@ -13,37 +12,34 @@ export const NotificationProvider = ({ children }) => {
     return stored ? JSON.parse(stored) : [];
   })
 
+  const socket = useSocket();
+  const { fetchTasks } = useTaskContext();
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    let userId;
-    try {
-      const decoded = jwtDecode(token);
-      userId = decoded.id;
-    } catch (err) {
-      console.error('Invalid token', err);
-      return;
-    }
-
-    const socket = io(backendUrl);
-
-    //Ensures registering after connection
-    socket.on('connect', () => {
-      socket.emit('register', userId);
-    });
-
-    //adding notification
-    socket.on('notification', (notification) => {
-      setNotifications((prev) => [notification, ...prev]);
-    });
-
-    return () => {
-      socket.off('connect');
-      socket.off('notification');
-      socket.disconnect();
-    };
+    console.log('NotificationProvider mounted');
   }, []);
+
+  useEffect(() => {
+    if(!socket) return;
+
+  const handleShare = (n) => {
+    setNotifications(prev => [n, ...prev]);
+    fetchTasks();
+  };
+
+  const handleDeadline = (n) => {
+    setNotifications(prev => [n, ...prev]);
+  };
+
+  socket.on('shareNotification', handleShare);
+  socket.on('deadlineNotification', handleDeadline);
+
+  return () => {
+    socket.off('shareNotification', handleShare);
+    socket.off('deadlineNotification', handleDeadline);
+  };
+  }, [socket]);
+
 
   //Save to localStorage whenever notifications change (for making refresh resistent)
   useEffect(() => {

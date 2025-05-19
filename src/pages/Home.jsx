@@ -1,7 +1,9 @@
 import TaskList from "../components/Home/TaskList";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { NotificationProvider } from "../NotificationContext";
+import { NotificationProvider } from "../contexts/NotificationContext";
+import { TaskProvider } from "../contexts/TaskContext";
+import { SocketProvider } from "../contexts/SocketContext";
 
 
 //Main page after login
@@ -23,13 +25,17 @@ function Home()
 
     return(
       <>
-    <NotificationProvider>
-      <Navbar/>
-      </NotificationProvider>
-    <div className="todo-container">
-        <h1>{username}'s Todo App</h1>
-    <TaskList token={token}/>
-    </div>
+      <SocketProvider>
+        <TaskProvider>
+          <NotificationProvider>
+            <Navbar />
+            <div className="todo-container">
+              <h1>{username}'s Todo App</h1>
+              <TaskList token={token} />
+            </div>
+          </NotificationProvider>
+        </TaskProvider>
+      </SocketProvider>
     </>
     )
 }
