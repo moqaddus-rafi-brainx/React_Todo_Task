@@ -1,39 +1,30 @@
 import axios from "axios";
+import { TaskApiClient } from "./clients/TaskApiClient";
 
 const TaskUrl=import.meta.env.VITE_TASK_URL;
 
 //Add task Api function
-export const addTask=async(tokenFromNav,description)=>{
-   
-    return axios.post(`${TaskUrl}`,{ description }, {
-       headers: {
-          Authorization: `Bearer ${tokenFromNav}`
-        },          
-    })
+export const addTask=async(data)=>{
+
+    return TaskApiClient.post('',data);
  }
 //Update Task Api Function
- export const updateTask = async (token, taskId, updatedFields) => {
-    return axios.patch(`${TaskUrl}/${taskId}`, updatedFields, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+ export const updateTask = async (taskId, updatedFields) => {
+    return TaskApiClient.patch(`/${taskId}`, updatedFields);
   }
 
   //Delete task Api call
-  export const deleteTask= async(tokenFromNav,taskId)=>{
-    return axios.delete(`${TaskUrl}/${taskId}`, {
-        headers: {
-           Authorization: `Bearer ${tokenFromNav}`
-         },          
-     });
+  export const deleteTask= async(taskId)=>{
+    return TaskApiClient.delete(`/${taskId}`);
   }
 
   //Get tasks Api call
-  export const getAllTasks=async(tokenFromNav)=>{
-    return axios.get(`${TaskUrl}`, {
-        headers: {
-           Authorization: `Bearer ${tokenFromNav}`
-         }
-     })
+  export const getAllTasks=async()=>{
+    return TaskApiClient.get('')
+  }
+
+  //Share Task Api call
+  export const shareTask=async(taskId,email,setLoading)=>{
+    setLoading(true);
+    return TaskApiClient.post(`/${taskId}`, email);
   }

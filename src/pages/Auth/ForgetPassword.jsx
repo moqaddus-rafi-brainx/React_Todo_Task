@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import emailReducer from "../../reducers/ForgetPasswordReducer";
 import { emailRegex } from "../../constants";
 import { forgetPassword } from "../../apis/AuthApis";
-import axios from "axios";
+
 //Forget password function
 function ForgetPassword(){
 

@@ -1,5 +1,4 @@
 import { useReducer, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import confirmPassReducer from "../../reducers/ResetPasswordReducer";
 import { passwordReducer } from "../../reducers/SignupReducer";
 import { changePassword } from "../../apis/AuthApis";
@@ -140,6 +139,7 @@ function ChangePassword() {
                 <p>
                     Password Changed Successfully!
                 </p>
+                <hr/>
                 <button onClick={handleGoBack}>
                     Back
                 </button>

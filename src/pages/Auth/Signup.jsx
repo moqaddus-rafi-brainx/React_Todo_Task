@@ -49,8 +49,8 @@ function Signup() {
               setIsLoading(false);
             } catch (error) {
               setIsLoading(false);
-              console.error('Signup Error:', error.response.data.message);
-              setSignupError(error.response.data.message);
+              console.error('Signup Error:', error.response.data?.message);
+              setSignupError(error.response.data?.message);
             }
     }
   };

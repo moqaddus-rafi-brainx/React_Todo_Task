@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { login } from "../../apis/AuthApis";
 
 
-
 //Login function
 function Login(){
     const [emailState,dispatchEmail]=useReducer(emailReducer,{
@@ -47,15 +46,17 @@ function Login(){
               try {
                     const response = await login(loginData,setIsLoading);
                     const token = response.data.token;
+                    const username=response.data.username;
                     setIsLoading(false);
                     if(token)
                     {
                     localStorage.setItem('token',token);
-                    navigate('/task-list',{ state: { token } });
+                    localStorage.setItem('name',username);
+                    navigate('/task-list');
                     }
               } catch (error) {
                     setIsLoading(false);
-                    const backendMessage = error.response.data.message;
+                    const backendMessage = error.response.data?.message || error.message ;
                     setBackendError(backendMessage);
                     console.error('Login Error:', error);
               }

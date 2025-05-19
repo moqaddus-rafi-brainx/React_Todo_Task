@@ -1,22 +1,32 @@
 import { useState,useEffect,useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { updateTask,deleteTask } from "../../apis/TaskApis";
+import { updateTask,deleteTask,shareTask } from "../../apis/TaskApis";
+import {jwtDecode} from "jwt-decode";
+import ShareModal from "./ShareModal";
+import { useTaskContext } from "../../contexts/TaskContext";
+
 
 
 //Component for each task
-function Task({task, tasks, setTasks ,token})
+function Task({task,token})
 {
+    const { setTasks } = useTaskContext();       
     const [hide,setHide]= useState(true);
     const [input,setInput]= useState(task.description);
-    const [marked,setMarked]=useState(task.isCompleted); //for marking as completed
-    let isFirstRender = useRef(true);
-    
+    const [sharing,setSharing]=useState(false);
+    const [emailToShare,setEmailToShare]=useState("");//Email of the recipient/collaborator
+    const [loading,setLoading]=useState(false);
+    const [backendError,setBackendError]=useState("");
+    //let isFirstRender = useRef(true);
+    const decoded = jwtDecode(token);
+    const isOwner = task.userId === decoded.id;
+
     //update task function
     const handleUpdateTask = async () => {
         try {
-          const response = await updateTask(token, task._id, {
+          const response = await updateTask(task._id, {
             description: input,
-            isCompleted: marked,
+            isCompleted: task.isCompleted,
           });
       
           setTasks(prevTasks =>
@@ -29,8 +39,6 @@ function Task({task, tasks, setTasks ,token})
           console.error('Update task error:', error);
         }
       };
-
-
 
     //button to update clicked
     const startUpdate=()=>{
@@ -49,7 +57,7 @@ function Task({task, tasks, setTasks ,token})
     const handleDeleteTask=async()=>{
 
         try {
-            await deleteTask(token, task._id);
+            await deleteTask(task._id);
         
             setTasks(prevTasks =>
               prevTasks.filter(t => t._id !== task._id)
@@ -57,39 +65,65 @@ function Task({task, tasks, setTasks ,token})
           } catch (error) {
             console.error('Delete task error:', error);
           }
-
     }
 
-    //Checked/Unchecked
-    const markTaskAsCompleted=()=>{
-        if(marked==true)
-        {
-            setMarked(false);
-        }
-        else if(marked==false)
-        {
-            setMarked(true);
-        }
+    //Toggle completed status
+  const toggleCompleted = async () => {
+    try {
+      await updateTask(task._id, { 
+        description: task.description, 
+        isCompleted: !task.isCompleted 
+      });
+    } catch (error) {
+      console.error("Toggle complete failed:", error);
     }
-    useEffect(()=>{ //DOnt call the updateTask for the first time//when component rendered
-        if(isFirstRender.current)
-        {
-            isFirstRender.current=false;
-            return;
-        }
-        handleUpdateTask();
-    },[marked])
+  };
+
+    const handleShareTask=async()=>{
+      try {
+        setBackendError("");
+        const response = await shareTask(task._id, {
+          email:emailToShare
+      },setLoading)
+      setEmailToShare("");
+      setLoading(false);
+      setSharing(false);
+
+    }catch (error) {
+      console.error('Share task error:', error.response.data?.message);
+      setBackendError(error.response.data?.message || error.message)
+      setLoading(false);
+
+    }
+    
+  }
 
     return(
     <li>
         <div className="task-left">
-            <input type="checkbox" checked={marked} onChange={markTaskAsCompleted}  />
+            <input type="checkbox" checked={task.isCompleted} onChange={toggleCompleted}  />
             {!hide && <input type="text" className="update-input" value={input} onChange={(e)=>{setInput(e.target.value)}} onBlur={handleUpdateTask} onKeyDown={updateOnKeyDown} />}
-            {hide && <span className={marked? "completed": "incomplete"}>{task.description}</span>}
+            {hide && <span className={task.isCompleted? "completed": "incomplete"}>{task.description}</span>}
         </div>
         <div className="task-right">
           <i className="bi bi-pencil-square" onClick={startUpdate} ></i>
-          <i className="bi bi-trash" onClick={handleDeleteTask} ></i>
+          {isOwner && (
+          <>
+            <i className="bi bi-trash" onClick={handleDeleteTask} ></i>
+            <i className="bi bi-share" onClick={() => setSharing(true)}></i>
+            {sharing && (
+                
+                <ShareModal
+                  onClose={() => setSharing(false)}
+                  onShare={handleShareTask}
+                  email={emailToShare}
+                  setEmail={setEmailToShare}
+                  loading={loading}
+                  backendError={backendError}
+                />
+            )}
+          </>
+        )}
         </div>
     </li>
     )
