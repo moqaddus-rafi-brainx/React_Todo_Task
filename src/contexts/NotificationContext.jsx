@@ -16,10 +16,6 @@ export const NotificationProvider = ({ children }) => {
   const { fetchTasks } = useTaskContext();
 
   useEffect(() => {
-    console.log('NotificationProvider mounted');
-  }, []);
-
-  useEffect(() => {
     if(!socket) return;
 
   const handleShare = (n) => {
